@@ -12,12 +12,6 @@ import pickle
 # Importing the required dataset
 dataset = pd.read_csv('Titanic-Dataset.csv')
 
-# Visualising the missing data
-plt.figure(figsize=(10,5))
-sns.heatmap(dataset.isnull(),cbar=False,cmap='viridis')
-plt.title('Missing values Heatmap')
-plt.show()
-
 #Filling in the missing data
 dataset['Age'] = dataset['Age'].fillna(dataset['Age'].median())
 dataset['Embarked'] = dataset['Embarked'].fillna(dataset['Embarked'].mode()[0])
@@ -38,28 +32,12 @@ ct = ColumnTransformer(transformers=[('encoders',OneHotEncoder(),[-2])],remainde
 X[:,1] = le.fit_transform(X[:,1])
 X = ct.fit_transform(X)
 
-#Visualising the survivors by gender
-sns.countplot(data=dataset,x='Sex',hue='Survived')
-plt.title('Survival count by gender class')
-plt.show()
-
-# Visualising survivors by the Passenger class
-sns.countplot(data=dataset,x='Pclass',hue='Survived')
-plt.title('Survival count by the Passenger class')
-plt.show()
-
-# Visualising survivors by the Age
-sns.histplot(data=dataset, x='Age', hue='Survived', bins=30, kde=True)
-plt.title("Age Distribution by Survival")
-plt.show()
-
 # Splitting the train and test sets
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,random_state=0)
 
 # Training the Random Forest model on the train sets
-classifier = RandomForestClassifier(n_estimators=100,random_state=0)
+classifier = RandomForestClassifier(n_estimators=50,random_state=0)
 classifier.fit(X,y)
-
 
 #Measuring the accuracy of the model
 y_pred = classifier.predict(X_test)
